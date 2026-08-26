@@ -172,6 +172,26 @@
             font-size: 18px;
             font-weight: 700;
         }
+
+        /* Floating Hearts & Balloons Animation */
+        .heart-particle {
+            position: absolute;
+            font-size: 26px;
+            pointer-events: none;
+            animation: floatUp 3s ease-out forwards;
+            z-index: 99;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.8) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-220px) scale(1.4) rotate(25deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -180,7 +200,7 @@
         <div class="card-reveal">
             <div class="emoji-header">🥳 🎂 🎉 ✨</div>
             <h1>Happy Birthday!</h1>
-            <div class="name-tag">Khushi 👑</div>
+            <div class="name-tag">Khushi Singh 👑</div>
             
             <p class="birthday-message" id="msg-text">
                 Wishing you a day as wonderful and extra special as you are! Hope your year ahead is full of happiness, laughter, and great moments. ✨
@@ -189,13 +209,13 @@
             <div class="interactive-zone" id="question-box">
                 <p class="question-text" id="q-text">Since we haven't met yet, how about a romantic coffee or dinner date to celebrate? ☕🍷✨</p>
                 <div class="btn-group" id="btn-container">
-                    <button class="btn btn-yes" id="yes-btn" onclick="showDatePicker()">LOVE TO!</button>
+                    <button class="btn btn-yes" id="yes-btn" onclick="showDatePicker()">I'd love to! ✨</button>
                 </div>
             </div>
 
             <div class="date-picker-zone" id="date-box">
                 <p class="question-text">Pick your preferred date! 📅</p>
-                <input type="date" id="date-select" class="date-input">
+                <input type="date" id="date-select" class="date-input" onchange="spawnFloatingLoveElements()">
                 <button class="btn btn-yes" onclick="sendResponse()">Send date ✨</button>
             </div>
         </div>
@@ -219,6 +239,7 @@
             canvas.width = container.offsetWidth;
             canvas.height = container.offsetHeight;
             ctx.globalCompositeOperation = 'source-over';
+            
             const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
             gradient.addColorStop(0, '#FAD0C4');
             gradient.addColorStop(0.5, '#FFD1FF');
@@ -226,11 +247,12 @@
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // Clean Minimal Central Scratch Text
             ctx.fillStyle = '#ff2a5f';
-            ctx.font = 'bold 28px -apple-system, sans-serif';
+            ctx.font = 'bold 26px -apple-system, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('🎁 SCRATCH ME ☕', canvas.width / 2, canvas.height / 2);
+            ctx.fillText('🎁 SCRATCH ME 💖', canvas.width / 2, canvas.height / 2);
         }
 
         window.addEventListener('load', initScratchLayer);
@@ -245,14 +267,10 @@
         function calculateMaxScale() {
             const yesBtn = document.getElementById('yes-btn');
             const questionText = document.getElementById('q-text');
-            
             const btnRect = yesBtn.getBoundingClientRect();
             const qRect = questionText.getBoundingClientRect();
 
-            // Distance from top of button to bottom of question text
             const availableGap = btnRect.top - qRect.bottom;
-            
-            // Allow expansion until top edge reaches within 10px of question text
             const maxAllowedScale = 1 + ((availableGap - 10) / (btnRect.height / 2));
             return Math.max(1.5, maxAllowedScale);
         }
@@ -262,7 +280,7 @@
             timerStarted = true;
 
             const targetScale = calculateMaxScale();
-            const incrementPerSecond = (targetScale - 1) / 60; // 10 mins (600 sec)
+            const incrementPerSecond = (targetScale - 1) / 600;
 
             growthInterval = setInterval(() => {
                 scaleFactor += incrementPerSecond;
@@ -316,10 +334,38 @@
         canvas.addEventListener('touchmove', scratch);
         canvas.addEventListener('touchend', () => { isDrawing = false; });
 
+        function createLoveParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'heart-particle';
+            const items = ['❤️', '💖', '🎈', '💕', '✨', '🌸', '🎈'];
+            particle.innerHTML = items[Math.floor(Math.random() * items.length)];
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 3000);
+        }
+
+        function spawnFloatingLoveElements() {
+            const rect = container.getBoundingClientRect();
+            for (let i = 0; i < 18; i++) {
+                setTimeout(() => {
+                    const randomX = rect.left + Math.random() * rect.width;
+                    const randomY = rect.bottom - (Math.random() * 80);
+                    createLoveParticle(randomX, randomY);
+                }, i * 100);
+            }
+        }
+
         function showDatePicker() {
             if (growthInterval) clearInterval(growthInterval);
             document.getElementById('question-box').style.display = 'none';
             document.getElementById('date-box').style.display = 'flex';
+            
+            // Trigger floating balloons & love signs right when "I'd love to!" is clicked
+            spawnFloatingLoveElements();
         }
 
         function sendResponse() {
@@ -330,10 +376,9 @@
             }
             
             const myPhoneNumber = "917039738156"; 
-            const message = encodeURIComponent(`Hey! 🥳 Let's meet for our romantic date on ${selectedDate}! ☕🍷✨`);
+            const message = encodeURIComponent(`Hey! 🥰 I'd love to go on a romantic date with you on ${selectedDate}! ☕🍷✨`);
             window.location.href = `https://wa.me/${myPhoneNumber}?text=${message}`;
         }
     </script>
 </body>
 </html>
-
