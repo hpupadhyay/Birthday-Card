@@ -262,7 +262,7 @@
             timerStarted = true;
 
             const targetScale = calculateMaxScale();
-            const incrementPerSecond = (targetScale - 1) / 600; // 10 mins (600 sec)
+            const incrementPerSecond = (targetScale - 1) / 60; // 10 mins (600 sec)
 
             growthInterval = setInterval(() => {
                 scaleFactor += incrementPerSecond;
