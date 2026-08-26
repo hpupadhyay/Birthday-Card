@@ -180,7 +180,7 @@
         <div class="card-reveal">
             <div class="emoji-header">🥳 🎂 🎉 ✨</div>
             <h1>Happy Birthday!</h1>
-            <div class="name-tag">Khushi Singh 👑</div>
+            <div class="name-tag">Khushi 👑</div>
             
             <p class="birthday-message">
                 Wishing you a day as wonderful and extra special as you are! Hope your year ahead is full of happiness, laughter, and great moments. ✨
@@ -196,7 +196,7 @@
             <div class="date-picker-zone" id="date-box">
                 <p class="question-text">Pick your preferred date! 📅</p>
                 <input type="date" id="date-select" class="date-input">
-                <button class="btn btn-yes" onclick="sendResponse()">Confirm & Send Date ✨</button>
+                <button class="btn btn-yes" onclick="sendResponse()">Submit✨</button>
             </div>
         </div>
 
@@ -247,7 +247,7 @@
             timerStarted = true;
 
             const targetScale = 4.5;
-            const incrementPerSecond = (targetScale - 1) / 600; // 600 seconds = 10 minutes
+            const incrementPerSecond = (targetScale - 1) / 60; // 60 seconds = 1 minute
 
             growthInterval = setInterval(() => {
                 scaleFactor += incrementPerSecond;
@@ -315,7 +315,7 @@
             }
             
             const myPhoneNumber = "917039738156"; 
-            const message = encodeURIComponent(`Hey! I scratched your card 🥳 Let's meet for our romantic date on ${selectedDate}! ☕🍷✨`);
+            const message = encodeURIComponent(`Hey! 🥳 Let's meet for our romantic date on ${selectedDate}! ☕🍷✨`);
             window.location.href = `https://wa.me/${myPhoneNumber}?text=${message}`;
         }
     </script>
