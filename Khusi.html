@@ -182,12 +182,12 @@
             <h1>Happy Birthday!</h1>
             <div class="name-tag">Khushi 👑</div>
             
-            <p class="birthday-message">
+            <p class="birthday-message" id="msg-text">
                 Wishing you a day as wonderful and extra special as you are! Hope your year ahead is full of happiness, laughter, and great moments. ✨
             </p>
 
             <div class="interactive-zone" id="question-box">
-                <p class="question-text">Since we haven't met yet, how about a romantic coffee or dinner date to celebrate? ☕🍷✨</p>
+                <p class="question-text" id="q-text">Since we haven't met yet, how about a romantic coffee or dinner date to celebrate? ☕🍷✨</p>
                 <div class="btn-group" id="btn-container">
                     <button class="btn btn-yes" id="yes-btn" onclick="showDatePicker()">YES!</button>
                 </div>
@@ -196,7 +196,7 @@
             <div class="date-picker-zone" id="date-box">
                 <p class="question-text">Pick your preferred date! 📅</p>
                 <input type="date" id="date-select" class="date-input">
-                <button class="btn btn-yes" onclick="sendResponse()">Submit✨</button>
+                <button class="btn btn-yes" onclick="sendResponse()">Send date ✨</button>
             </div>
         </div>
 
@@ -242,12 +242,27 @@
             return { x, y };
         }
 
+        function calculateMaxScale() {
+            const yesBtn = document.getElementById('yes-btn');
+            const questionText = document.getElementById('q-text');
+            
+            const btnRect = yesBtn.getBoundingClientRect();
+            const qRect = questionText.getBoundingClientRect();
+
+            // Distance from top of button to bottom of question text
+            const availableGap = btnRect.top - qRect.bottom;
+            
+            // Allow expansion until top edge reaches within 10px of question text
+            const maxAllowedScale = 1 + ((availableGap - 10) / (btnRect.height / 2));
+            return Math.max(1.5, maxAllowedScale);
+        }
+
         function startTenMinuteGrowth() {
             if (timerStarted) return;
             timerStarted = true;
 
-            const targetScale = 4.5;
-            const incrementPerSecond = (targetScale - 1) / 60; // 60 seconds = 1 minute
+            const targetScale = calculateMaxScale();
+            const incrementPerSecond = (targetScale - 1) / 600; // 10 mins (600 sec)
 
             growthInterval = setInterval(() => {
                 scaleFactor += incrementPerSecond;
@@ -321,3 +336,4 @@
     </script>
 </body>
 </html>
+
