@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Khushi!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 50%, #764ba2 100%);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 90vw;
+            max-width: 440px;
+            height: 80vh;
+            max-height: 620px;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .card-reveal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+            padding: 28px 20px;
+            background: radial-gradient(circle at center, #ffffff 0%, #fff0f5 60%, #ffe3ec 100%);
+            z-index: 1;
+        }
+
+        .emoji-header {
+            font-size: 38px;
+            z-index: 2;
+        }
+
+        .card-reveal h1 {
+            background: linear-gradient(45deg, #ff0844 0%, #ff4b2b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 32px;
+            font-weight: 900;
+            z-index: 2;
+        }
+
+        .name-tag {
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff2a5f 0%, #ff758c 100%);
+            padding: 10px 24px;
+            border-radius: 50px;
+            z-index: 2;
+        }
+
+        .birthday-message {
+            color: #333;
+            font-size: 17px;
+            line-height: 1.5;
+            font-weight: 600;
+            max-width: 95%;
+            z-index: 2;
+        }
+
+        .interactive-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .question-text {
+            color: #ff2a5f;
+            font-size: 18px;
+            font-weight: 800;
+            padding: 0 10px;
+        }
+
+        .btn-group {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 90px;
+            overflow: visible;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 18px;
+            font-weight: 800;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-yes {
+            background: #25D366;
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 5;
+            position: relative;
+            transform-origin: center center;
+        }
+
+        .date-picker-zone {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .date-input {
+            padding: 12px 18px;
+            font-size: 18px;
+            border-radius: 14px;
+            border: 2px solid #ff2a5f;
+            outline: none;
+            text-align: center;
+            font-weight: 700;
+            color: #ff2a5f;
+            background: #fff;
+            width: 80%;
+        }
+
+        #scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            touch-action: none;
+            z-index: 10;
+            transition: opacity 0.4s ease;
+        }
+
+        .instruction {
+            margin-top: 18px;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="card-container">
+        <div class="card-reveal">
+            <div class="emoji-header">🥳 🎂 🎉 ✨</div>
+            <h1>Happy Birthday!</h1>
+            <div class="name-tag">Khushi Singh 👑</div>
+            
+            <p class="birthday-message">
+                Wishing you a day as wonderful and extra special as you are! Hope your year ahead is full of happiness, laughter, and great moments. ✨
+            </p>
+
+            <div class="interactive-zone" id="question-box">
+                <p class="question-text">Since we haven't met yet, how about a romantic coffee or dinner date to celebrate? ☕🍷✨</p>
+                <div class="btn-group" id="btn-container">
+                    <button class="btn btn-yes" id="yes-btn" onclick="showDatePicker()">YES!</button>
+                </div>
+            </div>
+
+            <div class="date-picker-zone" id="date-box">
+                <p class="question-text">Pick your preferred date! 📅</p>
+                <input type="date" id="date-select" class="date-input">
+                <button class="btn btn-yes" onclick="sendResponse()">Confirm & Send Date ✨</button>
+            </div>
+        </div>
+
+        <canvas id="scratch-canvas"></canvas>
+    </div>
+
+    <p class="instruction">✨ Touch & scratch to reveal ✨</p>
+
+    <script>
+        const canvas = document.getElementById('scratch-canvas');
+        const container = document.getElementById('card-container');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let isCleared = false;
+        let timerStarted = false;
+        let growthInterval = null;
+        let scaleFactor = 1;
+
+        function initScratchLayer() {
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            ctx.globalCompositeOperation = 'source-over';
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#FAD0C4');
+            gradient.addColorStop(0.5, '#FFD1FF');
+            gradient.addColorStop(1, '#F1A7F1');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#ff2a5f';
+            ctx.font = 'bold 28px -apple-system, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🎁 SCRATCH ME ☕', canvas.width / 2, canvas.height / 2);
+        }
+
+        window.addEventListener('load', initScratchLayer);
+
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            let x = (e.touches && e.touches[0]) ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
+            let y = (e.touches && e.touches[0]) ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
+            return { x, y };
+        }
+
+        function startTenMinuteGrowth() {
+            if (timerStarted) return;
+            timerStarted = true;
+
+            const targetScale = 4.5;
+            const incrementPerSecond = (targetScale - 1) / 600; // 600 seconds = 10 minutes
+
+            growthInterval = setInterval(() => {
+                scaleFactor += incrementPerSecond;
+                if (scaleFactor >= targetScale) {
+                    scaleFactor = targetScale;
+                    clearInterval(growthInterval);
+                }
+                document.getElementById('yes-btn').style.transform = `scale(${scaleFactor})`;
+            }, 1000);
+        }
+
+        function checkScratchPercentage() {
+            if (isCleared) return;
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+            let transparentPixels = 0;
+            
+            for (let i = 3; i < pixels.length; i += 16) {
+                if (pixels[i] === 0) {
+                    transparentPixels++;
+                }
+            }
+            
+            const totalSampledPixels = pixels.length / 16;
+            if (transparentPixels / totalSampledPixels > 0.50) {
+                isCleared = true;
+                canvas.style.opacity = '0';
+                setTimeout(() => {
+                    canvas.style.display = 'none';
+                }, 400);
+
+                startTenMinuteGrowth();
+            }
+        }
+
+        function scratch(e) {
+            if (!isDrawing || isCleared) return;
+            e.preventDefault();
+            const { x, y } = getPos(e);
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 65, 0, Math.PI * 2);
+            ctx.fill();
+            checkScratchPercentage();
+        }
+
+        canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+        canvas.addEventListener('mousemove', scratch);
+        canvas.addEventListener('mouseup', () => { isDrawing = false; });
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+        canvas.addEventListener('touchmove', scratch);
+        canvas.addEventListener('touchend', () => { isDrawing = false; });
+
+        function showDatePicker() {
+            if (growthInterval) clearInterval(growthInterval);
+            document.getElementById('question-box').style.display = 'none';
+            document.getElementById('date-box').style.display = 'flex';
+        }
+
+        function sendResponse() {
+            const selectedDate = document.getElementById('date-select').value;
+            if (!selectedDate) {
+                alert('Please select a date first!');
+                return;
+            }
+            
+            const myPhoneNumber = "917039738156"; 
+            const message = encodeURIComponent(`Hey! I scratched your card 🥳 Let's meet for our romantic date on ${selectedDate}! ☕🍷✨`);
+            window.location.href = `https://wa.me/${myPhoneNumber}?text=${message}`;
+        }
+    </script>
+</body>
+</html>
